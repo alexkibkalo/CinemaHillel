@@ -2,6 +2,7 @@ package com.ua.controller;
 
 import com.ua.model.User;
 import com.ua.service.UserService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,11 +13,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Api(value = "User Controller API")
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -24,8 +28,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/create")
-    public void create(@RequestBody User user) {
+    @PostMapping("/create/{language}")
+    public void create(@RequestBody User user,
+                       @RequestHeader("Authorization") String password,
+                       @RequestParam(name = "username") String username,
+                       @PathVariable String language) {
+        System.out.println("We creating new user in " + language + " language");
+        user.setUsername(username);
+        user.setPassword(password);
         userService.create(user);
     }
 
