@@ -2,20 +2,26 @@ package com.ua.service;
 
 import com.ua.model.User;
 import com.ua.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
     @Override
+    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
     public void create(User user) {
         userRepository.save(user);
     }
@@ -26,21 +32,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll() {
-        return userRepository.findAll();
+    @Transactional(readOnly = true)
+    public Page<User> getAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<User> getAllSorted() {
+        Sort sort = Sort.by(Sort.Order.desc("id"));
+        return userRepository.findAll(sort);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public User update(Long userId, User incomingUser) {
         User user = getById(userId);
-
-        if(incomingUser.getJob() != null){
-            user.setJob(incomingUser.getJob());
-        }
-        if(incomingUser.getSalary() != null){
-            user.setSalary(incomingUser.getSalary());
-        }
-
         return userRepository.save(user);
     }
 

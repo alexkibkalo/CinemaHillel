@@ -1,6 +1,9 @@
 package com.ua.service;
 
 import com.ua.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -10,7 +13,10 @@ public interface UserService {
 
     User getById(Long userId);
 
-    List<User> getAll();
+    Page<User> getAll(Pageable pageable);
+
+    @Transactional(readOnly = true)
+    List<User> getAllSorted();
 
     User update(Long userId, User user);
 
