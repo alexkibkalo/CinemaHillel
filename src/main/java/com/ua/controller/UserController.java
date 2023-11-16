@@ -1,7 +1,7 @@
 package com.ua.controller;
 
 import com.ua.model.User;
-import com.ua.service.UserService;
+import com.ua.service.user.UserService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

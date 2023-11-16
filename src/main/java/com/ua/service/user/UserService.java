@@ -1,4 +1,4 @@
-package com.ua.service;
+package com.ua.service.user;
 
 import com.ua.model.User;
 import org.springframework.data.domain.Page;
