@@ -1,16 +1,16 @@
 package com.ua.transport.mapper;
 
 import com.ua.model.User;
-import com.ua.transport.dto.UserIncomeDto;
-import org.springframework.stereotype.Component;
+import com.ua.transport.dto.UserDTO;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
-@Component
-public class UserMapper {
+@Mapper(uses = {TicketMapper.class}, componentModel = "spring")
+public interface UserMapper {
 
-    public User dtoToEntity(UserIncomeDto dto){
-        User user = new User();
-        user.setUsername(dto.getUsername());
-        user.setPassword(dto.getPassword());
-        return user;
-    }
+    UserDTO toDto(User entity);
+
+    User toEntity(UserDTO dto);
+
+    void update(UserDTO dto, @MappingTarget User user);
 }

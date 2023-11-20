@@ -1,9 +1,10 @@
 package com.ua.controller;
 
-import com.ua.model.User;
+import com.ua.service.authorization.AuthorizationService;
 import com.ua.service.user.UserService;
+import com.ua.transport.dto.UserDTO;
 import io.swagger.annotations.Api;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -23,44 +23,56 @@ import java.util.List;
 @Api(value = "User Controller API")
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final AuthorizationService authorizationService;
 
-    @PostMapping("/create/{language}")
-    public void create(@RequestBody User user,
-                       @RequestHeader("Authorization") String password,
-                       @RequestParam(name = "username") String username,
-                       @PathVariable String language) {
-        System.out.println("We creating new user in " + language + " language");
-        user.setUsername(username);
-        user.setPassword(password);
+    @PostMapping
+    public void create(@RequestBody UserDTO user,
+                       @RequestHeader("username") String username,
+                       @RequestHeader("password") String password) {
+        authorizationService.isAuthorize(username, password);
         userService.create(user);
     }
 
-    @GetMapping("/get/{userId}")
-    public User getById(@PathVariable Long userId) {
+    @GetMapping("/{userId}")
+    public UserDTO getById(@PathVariable Long userId,
+                           @RequestHeader("username") String username,
+                           @RequestHeader("password") String password) {
+        authorizationService.isAuthorize(username, password);
         return userService.getById(userId);
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<Page<User>> getAll(Pageable pageable) {
+    @GetMapping
+    public ResponseEntity<Page<UserDTO>> getAll(Pageable pageable,
+                                             @RequestHeader("username") String username,
+                                             @RequestHeader("password") String password) {
+        authorizationService.isAuthorize(username, password);
         return ResponseEntity.ok(userService.getAll(pageable));
     }
 
-    @GetMapping("/get/sorted")
-    public List<User> getAll() {
+    @GetMapping("/sorted")
+    public List<UserDTO> getAll(@RequestHeader("username") String username,
+                             @RequestHeader("password") String password) {
+        authorizationService.isAuthorize(username, password);
         return userService.getAllSorted();
     }
 
-    @PutMapping("/update/{userId}")
-    public User update(@PathVariable Long userId, @RequestBody User user) {
-        return userService.update(userId, user);
+    @PutMapping("/{userId}")
+    public void update(@PathVariable Long userId, @RequestBody UserDTO user,
+                       @RequestHeader("username") String username,
+                       @RequestHeader("password") String password) {
+        authorizationService.isAuthorize(username, password);
+        userService.update(userId, user);
     }
 
-    @DeleteMapping("/delete/{userId}")
-    public void delete(@PathVariable Long userId) {
+    @DeleteMapping("/{userId}")
+    public void delete(@PathVariable Long userId,
+                       @RequestHeader("username") String username,
+                       @RequestHeader("password") String password) {
+        authorizationService.isAuthorize(username, password);
         userService.delete(userId);
     }
 }
