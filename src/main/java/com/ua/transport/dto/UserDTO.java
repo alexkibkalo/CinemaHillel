@@ -2,12 +2,20 @@ package com.ua.transport.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class UserIncomeDto {
+@NoArgsConstructor
+public class UserDTO {
+
+    private Long id;
     private String username;
     private String password;
+    private boolean isAuthorized;
+    private List<TicketDTO> tickets;
 }

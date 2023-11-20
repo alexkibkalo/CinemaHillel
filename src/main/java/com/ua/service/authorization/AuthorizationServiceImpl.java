@@ -1,10 +1,12 @@
 package com.ua.service.authorization;
 
 import com.ua.repository.UserRepository;
-import com.ua.transport.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.ua.util.Exceptions.UNAUTHORIZED;
+
 
 @Service
 @Transactional
@@ -12,6 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthorizationServiceImpl implements AuthorizationService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
 
+    @Override
+    public void isAuthorize(String username, String password) {
+        if(!isUserExist(username, password)){
+            throw new RuntimeException(UNAUTHORIZED);
+        }
+    }
+
+    private boolean isUserExist(String username, String password) {
+        return userRepository.getUserByUsernameAndPassword(username, password) != null;
+    }
 }

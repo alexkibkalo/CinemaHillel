@@ -2,13 +2,14 @@ package com.ua.service.user;
 
 import com.ua.model.User;
 import com.ua.repository.UserRepository;
+import com.ua.transport.dto.UserDTO;
+import com.ua.transport.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -19,41 +20,45 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
-    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
-    public void create(User user) {
+    public void create(UserDTO dto) {
+        User user = userMapper.toEntity(dto);
         userRepository.save(user);
     }
 
     @Override
-    public User getById(Long userId) {
-        return userRepository.getUserById(userId);
+    public UserDTO getById(Long userId) {
+        User user = userRepository.getUserById(userId);
+        return userMapper.toDto(user);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<User> getAll(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<UserDTO> getAll(Pageable pageable) {
+        Page<User> userPage = userRepository.findAll(pageable);
+        return null;
+//        return userMapper.toPageDto(userPage);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<User> getAllSorted() {
-        Sort sort = Sort.by(Sort.Order.desc("id"));
-        return userRepository.findAll(sort);
+    public List<UserDTO> getAllSorted() {
+        Sort sort = Sort.by(Sort.Order.asc("id"));
+        return userRepository.findAll(sort).stream()
+                .map(userMapper::toDto)
+                .toList();
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
-    public User update(Long userId, User incomingUser) {
-        User user = getById(userId);
-        return userRepository.save(user);
+    public void update(Long userId, UserDTO incomingUser) {
+        User user = userRepository.getUserById(userId);
+        userMapper.update(incomingUser, user);
     }
 
     @Override
     public void delete(Long userId) {
-        User user = getById(userId);
-        userRepository.delete(user);
+        userRepository.deleteById(userId);
     }
 }
