@@ -3,13 +3,11 @@ package com.ua.service.authorization;
 import com.ua.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.ua.util.Exceptions.UNAUTHORIZED;
 
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class AuthorizationServiceImpl implements AuthorizationService {
 

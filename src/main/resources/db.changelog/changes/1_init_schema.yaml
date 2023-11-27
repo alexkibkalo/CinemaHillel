@@ -35,7 +35,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
-                  defaultValueComputed: nextval('users_id_seq'::regclass)
+                  defaultValueComputed: nextval('users_id_seq')
                   constraints:
                     primaryKey: true
               - column:
@@ -61,7 +61,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
-                  defaultValueComputed: nextval('movies_id_seq'::regclass)
+                  defaultValueComputed: nextval('movies_id_seq')
                   constraints:
                     primaryKey: true
               - column:
@@ -78,7 +78,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
-                  defaultValueComputed: nextval('sessions_id_seq'::regclass)
+                  defaultValueComputed: nextval('sessions_id_seq')
                   constraints:
                     primaryKey: true
               - column:
@@ -104,7 +104,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
-                  defaultValueComputed: nextval('tickets_id_seq'::regclass)
+                  defaultValueComputed: nextval('tickets_id_seq')
                   constraints:
                     primaryKey: true
               - column:
@@ -127,7 +127,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
-                  defaultValueComputed: nextval('cinema_halls_id_seq'::regclass)
+                  defaultValueComputed: nextval('cinema_halls_id_seq')
                   constraints:
                     primaryKey: true
               - column:
