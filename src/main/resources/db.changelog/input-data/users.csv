@@ -1,0 +1,4 @@
+id,is_authorized,username,password
+1,false,admin,admin
+2,false,user,user
+3,false,manager,manager

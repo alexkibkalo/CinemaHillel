@@ -1,0 +1,149 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Oleksandr Kibkalo
+      changes:
+        - createSequence:
+            sequenceName: users_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createSequence:
+            sequenceName: movies_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createSequence:
+            sequenceName: sessions_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createSequence:
+            sequenceName: tickets_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createSequence:
+            sequenceName: cinema_halls_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createTable:
+            schemaName: public
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueComputed: nextval('users_id_seq'::regclass)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: is_authorized
+                  type: boolean
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: username
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+        - createTable:
+            schemaName: public
+            tableName: movies
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueComputed: nextval('movies_id_seq'::regclass)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+        - createTable:
+            schemaName: public
+            tableName: sessions
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueComputed: nextval('sessions_id_seq'::regclass)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: start_date
+                  type: timestamp
+              - column:
+                  name: movie_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: session_movie_fk
+                    references: movies(id)
+              - column:
+                  name: cinema_hall_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: cinema_hall_user_fk
+                    references: users(id)
+
+        - createTable:
+            schemaName: public
+            tableName: tickets
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueComputed: nextval('tickets_id_seq'::regclass)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: movie_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: ticket_movie_fk
+                    references: movies(id)
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: ticket_user_fk
+                    references: users(id)
+
+        - createTable:
+            schemaName: public
+            tableName: cinema_halls
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueComputed: nextval('cinema_halls_id_seq'::regclass)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: number
+                  type: bigint
+                  constraints:
+                    primaryKey: unique
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: max_size
+                  type: bigint
+                  constraints:
+                    nullable: false
+

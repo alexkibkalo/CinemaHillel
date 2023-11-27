@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: Oleksandr Kibkalo
+      changes:
+        - loadData:
+            file: ../input-data/users.csv
+            tableName: users
+            relativeToChangelogFile: true
+        - loadData:
+            file: ../input-data/movies.csv
+            tableName: movies
+            relativeToChangelogFile: true
+        - loadData:
+            file: ../input-data/tickets.csv
+            tableName: tickets
+            relativeToChangelogFile: true
+        - loadData:
+            file: ../input-data/cinema_halls.csv
+            tableName: cinema_halls
+            relativeToChangelogFile: true
+        - loadData:
+            file: ../input-data/sessions.csv
+            tableName: sessions
+            relativeToChangelogFile: true

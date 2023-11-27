@@ -6,6 +6,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/cinema
     username: postgres
     password: admin
+  liquibase:
+    change-log: db.changelog/db.changelog-master.yaml
+    default-schema: public
 
   jpa:
     open-in-view: false
