@@ -27,52 +27,34 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final AuthorizationService authorizationService;
 
     @PostMapping
-    public void create(@RequestBody UserDTO user,
-                       @RequestHeader("username") String username,
-                       @RequestHeader("password") String password) {
-        authorizationService.isAuthorize(username, password);
+    public void create(@RequestBody UserDTO user){
         userService.create(user);
     }
 
     @GetMapping("/{userId}")
-    public UserDTO getById(@PathVariable Long userId,
-                           @RequestHeader("username") String username,
-                           @RequestHeader("password") String password) {
-        authorizationService.isAuthorize(username, password);
+    public UserDTO getById(@PathVariable Long userId) {
         return userService.getById(userId);
     }
 
     @GetMapping
-    public ResponseEntity<Page<UserDTO>> getAll(Pageable pageable,
-                                             @RequestHeader("username") String username,
-                                             @RequestHeader("password") String password) {
-        authorizationService.isAuthorize(username, password);
+    public ResponseEntity<Page<UserDTO>> getAll(Pageable pageable) {
         return ResponseEntity.ok(userService.getAll(pageable));
     }
 
     @GetMapping("/sorted")
-    public List<UserDTO> getAll(@RequestHeader("username") String username,
-                             @RequestHeader("password") String password) {
-        authorizationService.isAuthorize(username, password);
+    public List<UserDTO> getAll() {
         return userService.getAllSorted();
     }
 
     @PutMapping("/{userId}")
-    public void update(@PathVariable Long userId, @RequestBody UserDTO user,
-                       @RequestHeader("username") String username,
-                       @RequestHeader("password") String password) {
-        authorizationService.isAuthorize(username, password);
+    public void update(@PathVariable Long userId, @RequestBody UserDTO user) {
         userService.update(userId, user);
     }
 
     @DeleteMapping("/{userId}")
-    public void delete(@PathVariable Long userId,
-                       @RequestHeader("username") String username,
-                       @RequestHeader("password") String password) {
-        authorizationService.isAuthorize(username, password);
+    public void delete(@PathVariable Long userId) {
         userService.delete(userId);
     }
 }
