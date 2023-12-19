@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/cinema
+    url: jdbc:postgresql://localhost:5050/cinema
     username: postgres
     password: admin
   liquibase:
